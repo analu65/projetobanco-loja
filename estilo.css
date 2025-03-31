@@ -1,0 +1,40 @@
+body {
+    font-family: "Roboto";
+}
+
+.layout {
+    display: flex;
+    justify-content: flex-start;
+    height: 100px;
+    background-color: #ffffff;
+    
+}
+
+.botaocabecalho {
+    color: #666666;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 1s;
+    padding-inline: 90px;
+}
+
+.botaocabecalho:hover {
+    color: #353535;
+}
+.cabecalhoimagem {
+    margin-right: 20px; 
+    transform: translateY(8px);
+    padding-inline: 90px;
+}
+#logo{
+    height: 45px;
+    background-color: #ffffff;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-top: 1px solid rgb(63, 63, 63); 
+    border-bottom: 1px solid rgb(63, 63, 63);
+}
