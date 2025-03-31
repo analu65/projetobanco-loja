@@ -1,0 +1,26 @@
+body {
+    font-family: "Roboto";
+}
+
+.layout {
+    display: flex;
+    justify-content: baseline;
+    align-items: center;
+    height: 85px;
+    background-color: #ffffff;
+}
+
+.botaocabecalho {
+    color: #a8a8a8;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 1s;
+    padding-inline: 90px;
+}
+
+.botaocabecalho:hover {
+    color: #292929;
+}

@@ -27,4 +27,20 @@ if(isset($_POST['excluir'])) {
         echo "erro ao excluir os dados.";
     }
 }
+if(isset($_POST['alterar'])) {
+    $codigo = $_POST['codigo'];
+    $nome = $_POST['nome'];
+
+    $sql = "UPDATE categoria SET nome = '$nome' WHERE codigo = '$codigo'";
+    $resultado = mysql_query($sql);
+
+    if ($resultado === TRUE)
+  {
+     echo 'Dados alterados com Sucesso';
+  }
+  else
+  {
+     echo 'Erro ao alterar dados.';
+  }
+}
 ?>
