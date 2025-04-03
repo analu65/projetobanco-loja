@@ -1,5 +1,6 @@
 <?php
 $conectar = mysql_connect('localhost', 'root', '', 'loja');
+$db = mysql_select_db('loja')
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -28,13 +29,15 @@ $conectar = mysql_connect('localhost', 'root', '', 'loja');
                 <option value="" selected="selected"> selecione...
                 </option>
                 <?php
-                $query = mysql_query("SELECT codigo, descricao from categoria");
-                while($categorias = mysql_fetch_array($query))
-                {?>
+            $query = mysql_query("SELECT codigo, nome from categoria");
+            while($categorias = mysql_fetch_array($query)) { ?>
                 <option value="<?php echo $categorias['codigo']?>">
-                               <?php echo $categorias['descricao']?></option>
-                <?php }?>
+                    <?php echo $categorias['nome']?>
+                </option>
+            <?php } ?>
             </select>
+            <input type="submit" value="Enviar">
+
          </form>
         </div>
 </body>
