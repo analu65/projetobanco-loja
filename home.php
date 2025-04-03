@@ -1,3 +1,6 @@
+<?php
+$conectar = mysql_connect('localhost', 'root', '', 'loja');
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,14 +14,27 @@
         <div class="layout">
             <nav>
                 <img src="fotossites/morcego.png" height="55" width="150" class="cabecalhoimagem" >
-                
                 <a href="home.html" class="botaocabecalho">HOME</a>
                 <a href="login.html" class="botaocabecalho">LOGIN</a>
-                <div id="cabecalhoimagem">
             </nav>
             </div>
             <div id="logo">
                 <img src="fotossites/spectral.png" height="25" width="150">
             </div>
          </header>
+         <div id="formulario">
+         <form name="formulario" method="post" action="home.php">
+            <select name="categoria">
+                <option value="" selected="selected"> selecione...
+                </option>
+                <?php
+                $query = mysql_query("SELECT codigo, descricao from categoria");
+                while($categorias = mysql_fetch_array($query))
+                {?>
+                <option value="<?php echo $categorias['codigo']?>">
+                               <?php echo $categorias['descricao']?></option>
+                <?php }?>
+            </select>
+         </form>
+        </div>
 </body>
