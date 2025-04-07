@@ -4,8 +4,8 @@ $banco = mysql_select_db('loja');
 
 if(isset($_POST['gravar'])){
     $codigo = $_POST['codigo'];
-    $nome = $_POST['nome'];
-    $sql = "insert into tipo (codigo, nome) values ('$codigo', '$nome')";
+    $senha = $_POST['senha'];
+    $sql = "insert into login (codigo, senha) values ('$codigo', '$senha')";
     $resultado = mysql_query($sql);
     if ($resultado == TRUE) {
         echo "dados gravados com sucesso.";
@@ -17,8 +17,8 @@ if(isset($_POST['gravar'])){
 }
 if(isset($_POST['excluir'])) {
     $codigo = $_POST['codigo'];
-    $nome = $_POST['nome'];
-    $sql = "delete from tipo where codigo = '$codigo'";
+    $senha = $_POST['senha'];
+    $sql = "delete from login where codigo = '$codigo'";
     $resultado = mysql_query($sql);
     if ($resultado == TRUE) {
         echo "dados excluidos com sucesso.";
@@ -29,9 +29,9 @@ if(isset($_POST['excluir'])) {
 }
 if(isset($_POST['alterar'])) {
     $codigo = $_POST['codigo'];
-    $nome = $_POST['nome'];
+    $senha = $_POST['senha'];
 
-    $sql = "UPDATE tipo SET nome = '$nome' WHERE codigo = '$codigo'";
+    $sql = "UPDATE login SET senha = '$senha' WHERE codigo = '$codigo'";
     $resultado = mysql_query($sql);
 
     if ($resultado === TRUE)
