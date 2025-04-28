@@ -113,3 +113,29 @@ border: none;
   text-decoration: none;
 
 }
+.product_wrapper {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    float: left;
+    width: 220px;
+    text-align: center;
+}
+
+.product_wrapper .image {
+    margin-bottom: 10px;
+}
+
+.product_wrapper .name,
+.product_wrapper .price {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.buy {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
