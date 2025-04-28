@@ -8,7 +8,8 @@ if(isset($_POST['gravar'])){
     $sql = "insert into login (codigo, senha) values ('$codigo', '$senha')";
     $resultado = mysql_query($sql);
     if ($resultado == TRUE) {
-        echo "dados gravados com sucesso.";
+        header("Location: cadastros.html");
+        exit(); 
     }
     else {
         echo "erro ao gravar os dados";

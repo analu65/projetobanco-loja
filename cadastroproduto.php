@@ -91,7 +91,7 @@ if(isset($_POST['pesquisar'])) {
         echo "Desculpe, mas sua pesquisa nao encontrou resultados.";
     }
     else {
-        echo "<b>Produtos Cadastrados</b><br><br>";
+        echo "<b>Produtos Cadastrados</b><br>";
         while($dados = mysql_fetch_object($sql)) {
             echo "Codigo    : ".$dados->codigo."  ";
             echo "Desricao  : ".$dados->descricao." ";
