@@ -25,13 +25,42 @@ if (isset($_POST['action']) && $_POST['action']=="change"){
 
 }
 ?>
-<HTML>
+<!DOCTYPE html>
+<html lang="pt-br">
 <HEAD>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
  <TITLE>Carrinho Compras </TITLE>
   <link rel="stylesheet" href="estilo.css">
 </HEAD>
 <BODY>
 
+<header>
+        <div class="layout">
+            <nav>
+                <img src="fotossites/morcego.png" height="55" width="150" class="cabecalhoimagem">
+                <a href="home.php" class="botaocabecalho">HOME</a>
+                <a href="login.html" class="botaocabecalho">LOGIN</a>
+            </nav>
+        </div>
+        <?php
+        if(!empty($_SESSION["shopping_cart"])) {
+            $cart_count = count(array_keys($_SESSION["shopping_cart"]));
+        ?>
+        <div class="carrinho_div">
+            <a href="cartn.php">
+                <img src="fotossites/carrinho.png" height="50" width="50" />
+                <span><?php echo $cart_count; ?></span>
+            </a>
+        </div>
+
+        <?php
+        }
+        ?>
+        <div id="logo">
+            <img src="fotossites/spectral.png" height="25" width="150">
+        </div>
+    </header>
 
 <div class="cart">
 <?php
@@ -42,9 +71,9 @@ if(isset($_SESSION["shopping_cart"])){
 <tbody>
 <tr>
 <td></td>
-<td>Descricao</td>
-<td>Quantidade</td>
-<td>Pre�o</td>
+<td>Descrição</td>
+<td>Qtd</td>
+<td>Preço</td>
 <td>Total</td>
 </tr>
 <?php
@@ -95,7 +124,7 @@ $total_price += ($product["preco"]*$product["quantity"]);
 </table>
   <?php
 }else{
-	echo "<h3>Seu carrinho est� vazio !</h3>";
+	echo "<h3>Seu carrinho esta vazio !</h3>";
 	}
 ?>
 </div>

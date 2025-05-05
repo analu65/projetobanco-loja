@@ -1,7 +1,9 @@
 <?php
+session_start();
 $conectar = mysql_connect('localhost', 'root', '', 'loja');
 $db = mysql_select_db('loja');
 $status="";
+
 
 if (isset($_POST['codigo']) && $_POST['codigo']!=""){
    $codigo = $_POST['codigo'];
@@ -13,21 +15,18 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
 
    $cartArray = array($codigo=>array('descricao'=>$descricao,'preco'=>$preco,'quantity'=>1,'foto'=>$foto1));
 
-   if(empty($_SESSION["shopping_cart"])) {
-      $_SESSION["shopping_cart"] = $cartArray;
-      $status = "<div class='box'>Produto foi add ao carrinho !</div>";
-   }
-   else{
-      $array_keys = array_keys($_SESSION["shopping_cart"]);
-
-      if(in_array($codigo,$array_keys)) {
-         $status = "<div class='box' style='color:red;'>Produto já adicionado ao carrinho!</div>";
-      }
-      else {
-         $_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
-         $status = "<div class='box'>Produto foi adicionado ao carrinho!</div>";
-      }
-   }
+   if (!empty($_SESSION["shopping_cart"])) {
+    if (array_key_exists($codigo, $_SESSION["shopping_cart"])) {
+        $_SESSION["shopping_cart"][$codigo]['quantity'] += 1;
+        $status = "<div class='caixa_mensagem'>Quantidade aumentada!</div>";
+    } else {
+        $_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"], $cartArray);
+        $status = "<div class='caixa_mensagem'>Produto foi adicionado ao carrinho!</div>";
+    }
+} else {
+    $_SESSION["shopping_cart"] = $cartArray;
+    $status = "<div class='caixa_mensagem'>Produto foi adicionado ao carrinho!</div>";
+}
 }
 ?>
 <!DOCTYPE html>
@@ -43,7 +42,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         <div class="layout">
             <nav>
                 <img src="fotossites/morcego.png" height="55" width="150" class="cabecalhoimagem">
-                <a href="home.html" class="botaocabecalho">HOME</a>
+                <a href="home.php" class="botaocabecalho">HOME</a>
                 <a href="login.html" class="botaocabecalho">LOGIN</a>
             </nav>
         </div>
@@ -51,15 +50,20 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         if(!empty($_SESSION["shopping_cart"])) {
             $cart_count = count(array_keys($_SESSION["shopping_cart"]));
         ?>
-        <div class="cart_div">
-            <a href="cart.php"><img src="carrinho.png" height=50 width=50/>Carrinho<span>
-            <?php echo $cart_count; ?></span></a>
+        <div class="carrinho_div">
+            <a href="cartn.php">
+                <img src="fotossites/carrinho.png" height="50" width="50" />
+                <span><?php echo $cart_count; ?></span>
+            </a>
         </div>
+
+        <?php
+        }
+        ?>
         <div id="logo">
             <img src="fotossites/spectral.png" height="25" width="150">
         </div>
     </header>
-
     <div id="formulario">
         <form name="formulario" method="post" action="home.php">
             <select name="categoria">
@@ -99,7 +103,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
 
         // marca
         if(($marca <> 'null') and ($categoria == 'null') and ($tipo == 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
             FROM produto, marca, categoria, tipo
             WHERE produto.codmarca = marca.codigo
             and produto.codcategoria = categoria.codigo
@@ -110,7 +114,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // categoria
         else if (($marca =='null') and ($categoria <> 'null') and ($tipo == 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -121,7 +125,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // tipo
         else if (($marca == 'null') and ($categoria =='null') and ($tipo <> 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -132,7 +136,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // marca e categoria
         else if (($marca <> 'null') and ($categoria <> 'null') and ($tipo == 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -143,7 +147,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // marca e tipo
         else if (($marca <> 'null') and ($categoria == 'null') and ($tipo <> 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -154,7 +158,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // categoria e tipo
         else if (($marca == 'null') and ($categoria <> 'null') and ($tipo <> 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -165,7 +169,7 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         }
         // marca, categoria e tipo
         else if (($marca <> 'null') and ($categoria <> 'null') and ($tipo <> 'null')) {
-            $sql_produtos = "SELECT produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
+            $sql_produtos = "SELECT produto.codigo,produto.descricao,produto.cor,produto.tamanho,produto.preco,produto.foto1,produto.foto2
                             FROM produto, marca, categoria, tipo
                             WHERE produto.codmarca = marca.codigo
                             and produto.codcategoria = categoria.codigo
@@ -178,20 +182,18 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
         if(mysql_num_rows($seleciona_produtos) == 0) {
             echo '<h1>Desculpe, mas sua busca não retornou resultados ... </h1>';
         } else {
-            echo " <div class='titulo'><br><br>RESULTADOS <br><br></div>";
+            echo "<div class='titulo'><br><br>RESULTADOS <br><br></div>";
         }
 
         while ($dados = mysql_fetch_object($seleciona_produtos)) {
-            echo "<div class='product_wrapper'>
-                <form method='post' action='home.php'>
+            echo "<form method='post' action='home.php' class='produto-form'>
                     <input type='hidden' name='codigo' value='{$dados->codigo}' />
-                    <div class='name'>{$dados->descricao}</div>
+                    <div class='nome'>{$dados->descricao}</div>
                     <img src='fotos/{$dados->foto1}' height='150' width='150' />
-                    <img src='fotos/{$dados->foto2}' height='150' width='150' /><br>
-                    <div class='price'>Preço: R$ {$dados->preco}</div>
-                    <button type='submit' class='buy'>COMPRAR</button>
-                </form>
-            </div><br>";
+                    <img src='fotos/{$dados->foto2}' height='150' width='150' />
+                    <div class='preco'>Preço: R$ {$dados->preco}</div>
+                    <button type='submit'>COMPRAR</button>
+                </form>";
         }
     }
     ?>
