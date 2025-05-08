@@ -1,29 +1,30 @@
 <?php
 session_start();
 $status="";
-if (isset($_POST['action']) && $_POST['action']=="remove"){
-if(!empty($_SESSION["shopping_cart"])) {
-    foreach($_SESSION["shopping_cart"] as $key => $value) {
-      if($_POST["codigo"] == $key){
-      unset($_SESSION["shopping_cart"][$key]);
-      $status = "<div class='box' style='color:red;'>
-      Produto foi removido do carrinho !</div>";
-      }
-      if(empty($_SESSION["shopping_cart"]))
-      unset($_SESSION["shopping_cart"]);
-      }
-}
-}
-
-if (isset($_POST['action']) && $_POST['action']=="change"){
-  foreach($_SESSION["shopping_cart"] as &$value){
-    if($value['codigo'] === $_POST["codigo"]){
-        $value['quantity'] = $_POST["quantity"];
-        break;
+if (isset($_POST['action']) && $_POST['action'] == "remove" && isset($_POST["codigo"])) {
+    if (!empty($_SESSION["shopping_cart"])) {
+        foreach ($_SESSION["shopping_cart"] as $key => $value) {
+            if ($_POST["codigo"] == $key) {
+                unset($_SESSION["shopping_cart"][$key]);
+                $status = "<div class='box' style='color:red;'>Produto foi removido do carrinho !</div>";
+            }
+        }
+        if (empty($_SESSION["shopping_cart"])) {
+            unset($_SESSION["shopping_cart"]);
+        }
     }
 }
 
+if (isset($_POST['action']) && $_POST['action'] == "change" && isset($_POST["codigo"])) {
+
+    $qty = (int)$_POST["quantity"];
+    
+    if (isset($_SESSION["shopping_cart"][$_POST["codigo"]])) {
+        $_SESSION["shopping_cart"][$_POST["codigo"]]["quantity"] = $qty;
+        $status = "<div class='box' style='color:green;'>Quantidade atualizada!</div>";
+    }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -77,7 +78,7 @@ if(isset($_SESSION["shopping_cart"])){
 <td>Total</td>
 </tr>
 <?php
-foreach ($_SESSION["shopping_cart"] as $product){
+foreach ($_SESSION["shopping_cart"] as $key => $product){
 ?>
 <tr>
 <td>
@@ -85,26 +86,19 @@ foreach ($_SESSION["shopping_cart"] as $product){
 </td>
 <td><?php echo $product["descricao"]; ?><br />
 <form method='post' action=''>
-<input type='hidden' name='codigo' value="<?php echo $product["codigo"]; ?>" />
+<input type='hidden' name='codigo' value="<?php echo $key; ?>" />
 <input type='hidden' name='action' value="remove" />
 <button type='submit' class='remove'>Remove Item</button>
 </form>
 </td>
 <td>
 <form method='post' action=''>
-<input type='hidden' name='codigo' value="<?php echo $product["codigo"]; ?>" />
+<input type='hidden' name='codigo' value="<?php echo $key; ?>" />
 <input type='hidden' name='action' value="change" />
 <select name='quantity' class='quantity' onChange="this.form.submit()">
-<option <?php if($product["quantity"]==1) echo "selected";?>
-value="1">1</option>
-<option <?php if($product["quantity"]==2) echo "selected";?>
-value="2">2</option>
-<option <?php if($product["quantity"]==3) echo "selected";?>
-value="3">3</option>
-<option <?php if($product["quantity"]==4) echo "selected";?>
-value="4">4</option>
-<option <?php if($product["quantity"]==5) echo "selected";?>
-value="5">5</option>
+<?php for($i=1; $i<=5; $i++) { ?>
+    <option value="<?php echo $i; ?>" <?php if($product["quantity"]==$i) echo "selected"; ?>><?php echo $i; ?></option>
+<?php } ?>
 </select>
 </form>
 </td>
