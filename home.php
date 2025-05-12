@@ -36,6 +36,24 @@ if (isset($_POST['codigo']) && $_POST['codigo']!=""){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="estilo.css">
+    <style>
+        .carrinho_div {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.carrinho_div span {
+    background-color: #2b2b2b;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 14px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+        </style>
 </head>
 <body>
     <header>
